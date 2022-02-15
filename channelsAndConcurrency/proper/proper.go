@@ -19,6 +19,7 @@ func main() {
 		"http://twitter.com",
 		"http://leetcode.com",
 		"http://amazon.in",
+		"http://localhost:10000/",
 	}
 	c := make(chan string)
 	for _, link := range links {
@@ -38,7 +39,7 @@ func main() {
 			//This is a blocking statement, will wait for each routine to finish before starting next
 			// '<-c' will return link and that will be sent again to getStatus
 			getStatus(link, c)
-		}(<-c)//Calling this function with required argument
+		}(<-c) //Calling this function with required argument
 		//this is important, if we pass <-c directly in getStatus, because multiple routines are started here
 		//the refrence of <-c might change and hence we need to call by value so that even if refrence changes,
 		//the routine started here still work on the same link as when they were started.
