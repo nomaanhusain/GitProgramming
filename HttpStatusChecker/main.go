@@ -9,7 +9,7 @@ import (
 
 func main() {
 	//making a response
-	h2 := func(w http.ResponseWriter, _ *http.Request) {
+	h1 := func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusCreated)
 		w.Header().Set("Content-Type", "application/json")
 		resp := make(map[string][]string)
@@ -30,7 +30,7 @@ func main() {
 		w.Write(jsonResp)
 	}
 
-	http.HandleFunc("/", h2)
+	http.HandleFunc("/", h1)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
