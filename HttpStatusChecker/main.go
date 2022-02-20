@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -16,10 +18,10 @@ func main() {
 		//calling function
 		downStatus := hitStatus()
 		if len(downStatus) == 0 {
-			resp["status"] = []string{"All Active"}
+			resp["webstatus"] = []string{"All Active"}
 			resp["down"] = []string{""}
 		} else {
-			resp["status"] = []string{"Problem"}
+			resp["webstatus"] = []string{"Problem"}
 			//resp["down"] = strings.Join(downStatus, " ")
 			resp["down"] = downStatus
 		}
@@ -29,10 +31,12 @@ func main() {
 		}
 		w.Write(jsonResp)
 	}
-
-	http.HandleFunc("/", h1)
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	//We have used and external library for handeling cors https://github.com/rs/cors
+	//As we want cross origin enabled so that this API can be accessed by other applications line 36,37,38 is for that
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", h1)
+	handler := cors.Default().Handler(mux)
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
 func hitStatus() []string {
 	links := []string{
